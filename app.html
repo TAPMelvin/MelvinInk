@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tattooApp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MelvInk - Tattoo Studio</title>
+    
+    <!-- AngularJS and dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="booking.css" />
+    <link rel="stylesheet" href="designs.css" />
+    <link rel="stylesheet" href="schedule.css" />
+    <link rel="stylesheet" href="qa.css" />
+    <link rel="stylesheet" href="app.css" />
+    
+    <!-- Custom AngularJS modules -->
+    <script src="app/app.js"></script>
+    <script src="app/services/tattooService.js"></script>
+    <script src="app/components/homeComponent.js"></script>
+    <script src="app/components/featuredDesignItem.js"></script>
+    <script src="app/components/designsComponent.js"></script>
+    <script src="app/components/designItem.js"></script>
+    <script src="app/components/bookingComponent.js"></script>
+    <script src="app/components/scheduleComponent.js"></script>
+    <script src="app/components/qaComponent.js"></script>
+    
+    <!-- File upload directive -->
+    <script>
+      angular.module('tattooApp').directive('fileModel', ['$parse', function ($parse) {
+        return {
+          restrict: 'A',
+          link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+              scope.$apply(function(){
+                modelSetter(scope, element[0].files[0]);
+              });
+            });
+          }
+        };
+      }]);
+      
+      // Capitalize filter
+      angular.module('tattooApp').filter('capitalize', function() {
+        return function(input) {
+          return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <header>
+      <nav class="site-nav">
+        <a class="brand" href="#/">MelvInk</a>
+        <ul class="menu">
+          <li><a href="#/">Home</a></li>
+          <li><a href="#/schedule">Schedule</a></li>
+          <li><a href="#/booking">Booking Info</a></li>
+          <li><a href="#/designs">Available Designs</a></li>
+          <li><a href="#/qa">Q & A</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Main content area with AngularJS routing -->
+    <main ng-view></main>
+
+    <!-- Footer -->
+    <footer>
+      <p>Melvin Pineda and Michael Sorenson</p>
+    </footer>
+  </body>
+</html>

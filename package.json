@@ -1,0 +1,20 @@
+{
+  "name": "tattoo-booking-app",
+  "version": "1.0.0",
+  "description": "A tattoo booking application with AngularJS",
+  "main": "app.html",
+  "scripts": {
+    "start": "serve",
+    "dev": "serve -s . -l 3000"
+  },
+  "keywords": ["html", "css", "angularjs", "tattoo", "booking"],
+  "author": "Melvin Pineda",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "11.2.0"
+  },
+  "dependencies": {
+    "angular": "^1.8.2",
+    "angular-route": "^1.8.2"
+  }
+}
