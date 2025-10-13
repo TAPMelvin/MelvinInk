@@ -1,0 +1,30 @@
+{
+  "availability": {
+    "monday": { "open": "10:00", "close": "18:00", "available": true },
+    "tuesday": { "open": "10:00", "close": "18:00", "available": true },
+    "wednesday": { "open": "10:00", "close": "18:00", "available": true },
+    "thursday": { "open": "10:00", "close": "18:00", "available": true },
+    "friday": { "open": "10:00", "close": "18:00", "available": true },
+    "saturday": { "open": "12:00", "close": "16:00", "available": true },
+    "sunday": { "open": "12:00", "close": "16:00", "available": false }
+  },
+  "upcomingAppointments": [
+    {
+      "date": "2024-01-15",
+      "time": "14:00",
+      "client": "John Doe",
+      "design": "Korean Traditional Dragon",
+      "duration": "3 hours"
+    },
+    {
+      "date": "2024-01-18",
+      "time": "10:00", 
+      "client": "Jane Smith",
+      "design": "Minimalist Cherry Blossom",
+      "duration": "2 hours"
+    }
+  ],
+  "nextAvailable": "2024-01-20"
+}
+
+
