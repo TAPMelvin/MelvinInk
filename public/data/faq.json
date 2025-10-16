@@ -1,0 +1,26 @@
+{
+  "faqs": [
+    {
+      "question": "How much do tattoos cost?",
+      "answer": "Pricing varies based on size, complexity, and design type. Flash designs start at $150, custom designs start at $200. Contact me for a specific quote."
+    },
+    {
+      "question": "How long does a tattoo take?",
+      "answer": "Duration depends on the design complexity. Simple designs take 1-2 hours, while detailed pieces can take 4-6 hours or more."
+    },
+    {
+      "question": "Do you do cover-ups?",
+      "answer": "Yes, I specialize in cover-up work. Please bring reference photos and we can discuss the best approach during consultation."
+    },
+    {
+      "question": "What should I do to prepare for my appointment?",
+      "answer": "Get a good night's sleep, eat a substantial meal beforehand, stay hydrated, and avoid alcohol 24 hours prior to your appointment."
+    },
+    {
+      "question": "Do you offer touch-ups?",
+      "answer": "Yes, I provide one free touch-up within 6 months of the original tattoo, provided proper aftercare was followed."
+    }
+  ]
+}
+
+

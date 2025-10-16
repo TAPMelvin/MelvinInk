@@ -1,0 +1,357 @@
+/* designs.css - designs page styles */
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Noto+Serif+KR:wght@400;700&display=swap");
+
+body {
+  margin: 0;
+  font-family: "Noto Serif KR", serif;
+  background-color: #fefbf3;
+  color: #1e1a16;
+}
+
+/* navigation to match site */
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #aa361a;
+  padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.site-nav .brand {
+  color: #fff3e6;
+  text-decoration: none;
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 2rem;
+}
+.nav-toggle {
+  display: none;
+}
+.nav-toggle-label {
+  display: none;
+}
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+.menu a {
+  color: #fff3e6;
+  text-decoration: none;
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 1.3rem;
+}
+
+/* page title */
+h1 {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 3rem;
+  text-align: center;
+  margin: 2rem 0;
+  color: #aa361a;
+  text-decoration: none;
+  border-bottom: 2px solid #aa361a;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  width: 100%;
+}
+
+/* category filter */
+.category-filter {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  margin: 2rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.category-filter label {
+  font-family: "Noto Serif KR", serif;
+  font-weight: bold;
+  color: #2a1e1a;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+}
+
+.category-filter select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #aa361a;
+  border-radius: 4px;
+  font-family: "Noto Serif KR", serif;
+  font-size: 1rem;
+  background: white;
+  color: #2a1e1a;
+  min-width: 200px;
+}
+
+.category-filter select:focus {
+  outline: none;
+  border-color: #8b2c0f;
+  box-shadow: 0 0 0 2px rgba(170, 54, 26, 0.2);
+}
+
+/* designs container */
+.designs-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* designs grid */
+.designs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.design-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.design-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-color: #aa361a;
+}
+
+.image-container {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.design-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-bottom: 2px solid #f0f0f0;
+  transition: transform 0.3s ease;
+}
+
+.image-container:hover .design-image {
+  transform: scale(1.05);
+}
+
+.expand-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-container:hover .expand-overlay {
+  opacity: 1;
+}
+
+.expand-text {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.design-info {
+  padding: 1.5rem;
+}
+
+.design-info h3 {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 1.8rem;
+  color: #aa361a;
+  margin: 0 0 1rem 0;
+}
+
+.design-info p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* size options */
+.size-options {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 2px solid #aa361a;
+}
+
+.size-options h4 {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 1.4rem;
+  color: #aa361a;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.size-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #ddd;
+}
+
+.size-option:hover {
+  background: #aa361a;
+  color: white;
+  transform: translateX(5px);
+}
+
+.size-name {
+  font-weight: bold;
+  flex: 1;
+}
+
+.size-price {
+  font-weight: bold;
+  color: #aa361a;
+  margin: 0 1rem;
+}
+
+.size-duration {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.size-option:hover .size-price,
+.size-option:hover .size-duration {
+  color: white;
+}
+
+/* Buttons */
+.select-design-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #aa361a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.select-design-btn:hover {
+  background: #8b2c0f;
+  transform: translateY(-2px);
+}
+
+.book-now-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.book-now-btn {
+  padding: 0.75rem 2rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.book-now-btn:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+/* Image Modal */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: default;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  color: #aa361a;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-btn:hover {
+  color: #8b2c0f;
+}
+
+.expanded-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.modal-content h3 {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 2rem;
+  color: #aa361a;
+  margin: 0 0 1rem 0;
+}
+
+.modal-content p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  .design-gallery {
+    padding: 1rem;
+  }
+  /* keep menu visible and sizing consistent */
+  .menu {
+    display: flex;
+  }
+}

@@ -1,0 +1,108 @@
+/* index.css - home page styles */
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&family=Noto+Serif+KR:wght@400;700&display=swap");
+
+/* base reset and typography */
+body {
+  margin: 0;
+  font-family: "Noto Serif KR", serif;
+  background-color: #fdfaf5; /* light rice paper background */
+  color: #2a1e1a;
+}
+
+/* navigation styling */
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #aa361a; /* chinese red - unified */
+  padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: top 0.3s;
+}
+
+.site-nav .brand {
+  color: #fff8f0;
+  text-decoration: none;
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 2rem;
+}
+
+/* hamburger toggle elements */
+.nav-toggle {
+  display: none;
+}
+.nav-toggle-label {
+  display: none;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.menu a {
+  color: #fff8f0;
+  text-decoration: none;
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 1.3rem;
+}
+
+.menu a:hover {
+  color: #ffe6cc;
+}
+
+/* hero section using css grid */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3rem;
+  gap: 2rem;
+}
+
+.hero-copy h1 {
+  font-family: "Nanum Brush Script", cursive;
+  font-size: 3rem;
+  margin: 0 0 1rem 0;
+  text-decoration: none;
+  border-bottom: 2px solid #aa361a;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.hero-copy p {
+  line-height: 1.7;
+}
+
+.hero img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* design for mobile */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr; /* stack em */
+    padding: 1rem;
+  }
+
+  /* for menu and sizing */
+  .menu {
+    display: flex;
+  }
+}
+
+/* footer styles */
+footer {
+  background-color: #3b2d2f;
+  color: #f2e6d9;
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.9rem;
+}

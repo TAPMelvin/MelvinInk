@@ -1,0 +1,36 @@
+{
+  "designs": [
+    {
+      "id": 1,
+      "name": "Korean Traditional Tiger",
+      "image": "images/design1.png",
+      "description": "Traditional Korean tiger design inspired by ancient Korean art",
+      "sizes": [
+        {"name": "Small (3-4 inches)", "price": 300, "duration": "2-3 hours"},
+        {"name": "Medium (5-6 inches)", "price": 500, "duration": "3-4 hours"},
+        {"name": "Large (7-8 inches)", "price": 700, "duration": "4-5 hours"}
+      ],
+      "category": "traditional",
+      "available": true
+    },
+    {
+      "id": 2,
+      "name": "Korean Traditional Tiger",
+      "image": "images/design2.png",
+      "description": "Traditional Korean tiger design with detailed brushwork and traditional patterns",
+      "sizes": [
+        {"name": "Small (3-4 inches)", "price": 360, "duration": "2-3 hours"},
+        {"name": "Medium (5-6 inches)", "price": 560, "duration": "3-4 hours"},
+        {"name": "Large (7-8 inches)", "price": 760, "duration": "4-5 hours"}
+      ],
+      "category": "traditional",
+      "available": true
+    }
+  ],
+  "categories": [
+    "traditional",
+    "minimalist", 
+    "geometric",
+    "custom"
+  ]
+}

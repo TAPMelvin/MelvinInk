@@ -1,0 +1,30 @@
+{
+  "procedure": [
+    "To receive responses regarding all inquiries (cost, time, etc.), you must complete the form.",
+    "Flash for everyone is priced lower than Flash for only one and Custom Design.",
+    "I prioritize responses to flash inquiries over custom designs."
+  ],
+  "additionalInfo": [
+    "Please complete the form only if you trust my artistry and wish to collaborate.",
+    "If a requested design does not align with my style, I may decline.",
+    "A pre-appointment studio visit may be required."
+  ],
+  "tattooTypes": [
+    { "value": "flash", "label": "Flash" },
+    { "value": "custom", "label": "Custom Design" },
+    { "value": "coverup", "label": "Cover-up" },
+    { "value": "touchup", "label": "Touch-up" }
+  ],
+  "bodyParts": [
+    "Arm",
+    "Leg", 
+    "Back",
+    "Chest",
+    "Shoulder",
+    "Ankle",
+    "Wrist",
+    "Other"
+  ]
+}
+
+
