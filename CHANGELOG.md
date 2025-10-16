@@ -1,19 +1,8 @@
 # Change Log
 
-
-## [Unreleased] - 2025-10-15
-
 ### Added
 - UML diagrams for Parse models (Design, Client, Booking)
 - CHANGELOG.md for tracking project changes
-
-### Changed
-
-### Fixed
-
-## [1.0.0] - 2025-10-14
-
-### Added
 - Complete React migration from AngularJS
 - Interactive design gallery with lightbox modal
 - Calendar scheduling system with city-based availability
