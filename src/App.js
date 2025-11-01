@@ -10,6 +10,10 @@ import { useParseData, useParseForm } from './hooks/useParseData';
 import Design from './models/Design';
 import Booking from './models/Booking';
 import Client from './models/Client';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './components/Login';
+import Register from './components/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function Home() {
   return (
@@ -678,35 +682,96 @@ function BookingPage() {
   );
 }
 
+// Navigation component that uses auth context
+function Navigation() {
+  const { isAuthenticated, user, logout } = useAuth();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    await logout();
+    setLoggingOut(false);
+  };
+
+  return (
+    <header>
+      <nav className="site-nav">
+        <Link className="brand" to="/">MelvInk</Link>
+        <ul className="menu">
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/schedule">Schedule</Link></li>
+          <li><Link to="/booking">Booking Info</Link></li>
+          <li><Link to="/designs">Available Designs</Link></li>
+          <li><Link to="/faq">Q & A</Link></li>
+          {isAuthenticated ? (
+            <>
+              <li style={{ marginLeft: 'auto' }}>
+                <span style={{ color: '#666', padding: '0 1rem' }}>
+                  {user?.get('username') || 'User'}
+                </span>
+              </li>
+              <li>
+                <button 
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'inherit',
+                    cursor: loggingOut ? 'not-allowed' : 'pointer',
+                    padding: '0.5rem 1rem',
+                    fontSize: '1rem',
+                    opacity: loggingOut ? 0.6 : 1
+                  }}
+                >
+                  {loggingOut ? 'Logging out...' : 'Logout'}
+                </button>
+              </li>
+            </>
+          ) : (
+            <li style={{ marginLeft: 'auto' }}>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
+        </ul>
+      </nav>
+    </header>
+  );
+}
+
+function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/designs" element={<Designs />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/schedule" element={<Schedule />} />
+      <Route 
+        path="/booking" 
+        element={
+          <ProtectedRoute>
+            <BookingPage />
+          </ProtectedRoute>
+        } 
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
-    <BrowserRouter>
-      <header>
-        <nav className="site-nav">
-          <Link className="brand" to="/">MelvInk</Link>
-          <ul className="menu">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/schedule">Schedule</Link></li>
-            <li><Link to="/booking">Booking Info</Link></li>
-            <li><Link to="/designs">Available Designs</Link></li>
-            <li><Link to="/faq">Q & A</Link></li>
-          </ul>
-        </nav>
-      </header>
-
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/designs" element={<Designs />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/booking" element={<BookingPage />} />
-        </Routes>
-      </main>
-
-      <footer>
-        <p>Melvin Pineda and Michael Sorenson</p>
-      </footer>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navigation />
+        <main>
+          <AppRoutes />
+        </main>
+        <footer>
+          <p>Melvin Pineda and Michael Sorenson</p>
+        </footer>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
