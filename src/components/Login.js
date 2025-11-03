@@ -1,3 +1,10 @@
+/**
+ * Login Component
+ * 
+ * Provides user login functionality using ParseAuthService through AuthContext.
+ * Users are redirected to their original destination after successful login.
+ * Authenticated users cannot access this page (handled by AuthRouteGuard).
+ */
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -107,5 +114,6 @@ export default function Login() {
     </div>
   );
 }
+
 
 

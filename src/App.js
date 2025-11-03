@@ -6,14 +6,14 @@ import './schedule.css';
 import './qa.css';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useParseData, useParseForm } from './hooks/useParseData';
-import Design from './models/Design';
+import { useParseForm } from './hooks/useParseData';
 import Booking from './models/Booking';
 import Client from './models/Client';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import Register from './components/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import AuthRouteGuard from './components/AuthRouteGuard';
 
 function Home() {
   return (
@@ -32,12 +32,32 @@ function Home() {
 function Designs() {
   const navigate = useNavigate();
   const [selectedDesign, setSelectedDesign] = useState(null);
-  
-  // Use Parse hook to fetch designs
-  const { data: designs, loading, error } = useParseData(
-    () => Design.getAvailableDesigns(),
-    []
-  );
+  const [designs, setDesigns] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch designs from JSON file instead of Parse
+  useEffect(() => {
+    const fetchDesigns = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('/data/designs.json');
+        if (!response.ok) {
+          throw new Error('Failed to load designs');
+        }
+        const json = await response.json();
+        setDesigns(json.designs || []);
+      } catch (err) {
+        console.error('Error fetching designs:', err);
+        setError(err.message || 'Failed to load designs');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDesigns();
+  }, []);
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -52,22 +72,22 @@ function Designs() {
       <h1>Available Designs</h1>
       {loading && <p>Loading designs...</p>}
       {error && <p style={{ color: 'red' }}>Failed to load: {error}</p>}
-      {!loading && !error && designs && (
+      {!loading && !error && designs && designs.length > 0 && (
         <div className="design-gallery">
-          {designs.map((d) => (
-            <div key={d.id} className={`design-card ${!d.isAvailable() ? 'unavailable' : ''}`}>
+          {designs.map((d, index) => (
+            <div key={d.id || index} className={`design-card ${!d.available ? 'unavailable' : ''}`}>
               <img
-                src={d.getImageUrl() || `/images/design1.png`}
-                alt={d.get('name')}
+                src={d.image || `/images/design${(index % 2) + 1}.png`}
+                alt={d.name}
                 role="button"
                 tabIndex={0}
                 onClick={() => setSelectedDesign(d)}
                 onKeyDown={(e) => (e.key === 'Enter' ? setSelectedDesign(d) : null)}
               />
               <div className="design-info">
-                <h3>{d.get('name')}</h3>
-                <p>{d.get('description')}</p>
-                {!d.isAvailable() && <span className="unavailable-badge">Unavailable</span>}
+                <h3>{d.name}</h3>
+                <p>{d.description}</p>
+                {!d.available && <span className="unavailable-badge">Unavailable</span>}
                 <div style={{ marginTop: 12 }}>
                   <button
                     onClick={() => navigate('/booking')}
@@ -81,6 +101,9 @@ function Designs() {
             </div>
           ))}
         </div>
+      )}
+      {!loading && !error && (!designs || designs.length === 0) && (
+        <p>No designs available at this time.</p>
       )}
 
       {selectedDesign && (
@@ -129,8 +152,8 @@ function Designs() {
               ✕
             </button>
             <img
-              src={selectedDesign.getImageUrl() || `/images/design1.png`}
-              alt={selectedDesign.get('name')}
+              src={selectedDesign.image || `/images/design1.png`}
+              alt={selectedDesign.name}
               style={{
                 display: 'block',
                 maxWidth: '82vw',
@@ -707,7 +730,7 @@ function Navigation() {
             <>
               <li style={{ marginLeft: 'auto' }}>
                 <span style={{ color: '#666', padding: '0 1rem' }}>
-                  {user?.get('username') || 'User'}
+                  {user?.username || 'User'}
                 </span>
               </li>
               <li>
@@ -746,6 +769,7 @@ function AppRoutes() {
       <Route path="/designs" element={<Designs />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/schedule" element={<Schedule />} />
+      {/* Protected route - requires authentication */}
       <Route 
         path="/booking" 
         element={
@@ -754,8 +778,23 @@ function AppRoutes() {
           </ProtectedRoute>
         } 
       />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      {/* Auth routes - cannot be accessed if already logged in */}
+      <Route 
+        path="/login" 
+        element={
+          <AuthRouteGuard>
+            <Login />
+          </AuthRouteGuard>
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          <AuthRouteGuard>
+            <Register />
+          </AuthRouteGuard>
+        } 
+      />
     </Routes>
   );
 }

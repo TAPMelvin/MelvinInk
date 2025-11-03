@@ -45,17 +45,7 @@ module.exports = (env, argv) => {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
-            options: {
-              presets: [
-                ['@babel/preset-env', { targets: 'defaults' }],
-                ['@babel/preset-react', { runtime: 'automatic' }]
-              ],
-              plugins: [
-                '@babel/plugin-proposal-class-properties',
-                '@babel/plugin-syntax-dynamic-import'
-              ]
-            }
+            loader: 'babel-loader'
           }
         },
         

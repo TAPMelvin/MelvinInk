@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import Parse from '../parseConfig';
+// Use MockAuthService instead of ParseAuthService for local storage authentication
+import MockAuthService from '../services/MockAuthService';
 
 const AuthContext = createContext(null);
 
@@ -11,6 +12,13 @@ export const useAuth = () => {
   return context;
 };
 
+/**
+ * AuthProvider Component
+ * 
+ * Provides authentication state and methods to all child components.
+ * Uses MockAuthService (localStorage) to handle all authentication operations.
+ * No backend required - all data stored locally in the browser.
+ */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,69 +28,55 @@ export const AuthProvider = ({ children }) => {
     checkCurrentUser();
   }, []);
 
+  /**
+   * Check if there is a current authenticated user
+   */
   const checkCurrentUser = async () => {
-    try {
-      const currentUser = Parse.User.current();
-      if (currentUser) {
-        // Verify session is still valid
-        await currentUser.fetch();
-        setUser(currentUser);
-      }
-    } catch (error) {
-      console.error('Error checking current user:', error);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+    const currentUser = await MockAuthService.checkCurrentUser();
+    setUser(currentUser);
+    setLoading(false);
   };
 
+  /**
+   * Log in a user
+   * @param {string} username - The user's username
+   * @param {string} password - The user's password
+   * @returns {Promise<{success: boolean, user?: Object, error?: string}>}
+   */
   const login = async (username, password) => {
-    try {
-      const loggedInUser = await Parse.User.logIn(username, password);
-      setUser(loggedInUser);
-      return { success: true, user: loggedInUser };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Login failed. Please check your credentials.' 
-      };
+    const result = await MockAuthService.login(username, password);
+    if (result.success) {
+      setUser(result.user);
     }
+    return result;
   };
 
+  /**
+   * Register a new user
+   * @param {string} username - The desired username
+   * @param {string} email - The user's email address
+   * @param {string} password - The user's password
+   * @param {Object} additionalData - Optional additional user data
+   * @returns {Promise<{success: boolean, user?: Object, error?: string}>}
+   */
   const register = async (username, email, password, additionalData = {}) => {
-    try {
-      const user = new Parse.User();
-      user.set('username', username);
-      user.set('email', email);
-      user.set('password', password);
-      
-      // Set any additional user data
-      Object.keys(additionalData).forEach(key => {
-        user.set(key, additionalData[key]);
-      });
-
-      const createdUser = await user.signUp();
-      setUser(createdUser);
-      return { success: true, user: createdUser };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Registration failed. Please try again.' 
-      };
+    const result = await MockAuthService.register(username, email, password, additionalData);
+    if (result.success) {
+      setUser(result.user);
     }
+    return result;
   };
 
+  /**
+   * Log out the current user
+   * @returns {Promise<{success: boolean, error?: string}>}
+   */
   const logout = async () => {
-    try {
-      await Parse.User.logOut();
+    const result = await MockAuthService.logout();
+    if (result.success) {
       setUser(null);
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Logout failed.' 
-      };
     }
+    return result;
   };
 
   const value = {
@@ -96,5 +90,6 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
 
 

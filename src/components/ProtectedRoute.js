@@ -1,3 +1,12 @@
+/**
+ * ProtectedRoute Component
+ * 
+ * Wraps routes that require authentication. 
+ * - Prevents unauthenticated users from accessing protected routes
+ * - Redirects to login page with return path for seamless navigation
+ * - Handles loading states during authentication checks
+ * - Works for both navigation clicks and manual URL entry
+ */
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -29,5 +38,6 @@ export default function ProtectedRoute({ children }) {
   // If authenticated, render the protected component
   return children;
 }
+
 
 

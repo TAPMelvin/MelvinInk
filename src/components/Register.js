@@ -1,3 +1,10 @@
+/**
+ * Register Component
+ * 
+ * Provides user registration functionality using ParseAuthService through AuthContext.
+ * Includes form validation for email format, password strength, and password confirmation.
+ * Authenticated users cannot access this page (handled by AuthRouteGuard).
+ */
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -164,5 +171,6 @@ export default function Register() {
     </div>
   );
 }
+
 
 
