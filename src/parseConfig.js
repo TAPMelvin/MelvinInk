@@ -1,13 +1,12 @@
 import Parse from 'parse';
 
-// Parse configuration
-// You can set these via environment variables or replace with your actual credentials
-const PARSE_APPLICATION_ID = process.env.PARSE_APP_ID || 'your-app-id';
-const PARSE_HOST_URL = process.env.PARSE_HOST_URL || 'https://parseapi.back4app.com/';
-const PARSE_JAVASCRIPT_KEY = process.env.PARSE_JS_KEY || 'your-javascript-key';
+// Parse configuration - Back4App credentials
+// Match Back4App documentation format exactly
+const PARSE_APPLICATION_ID = '1gmmKycnpK1J4rjYuanP0PZqmfd2VLknYJM8UOcR';
+const PARSE_JAVASCRIPT_KEY = 'M0w0goPKgHs1gyxYTtUFuLrSRsA7ADVCi5wFuSCa';
 
-// Initialize Parse
+// Initialize Parse (Back4App format)
 Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
-Parse.serverURL = PARSE_HOST_URL;
+Parse.serverURL = 'https://parseapi.back4app.com';
 
 export default Parse;

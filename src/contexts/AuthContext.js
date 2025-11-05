@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-// Use MockAuthService instead of ParseAuthService for local storage authentication
-import MockAuthService from '../services/MockAuthService';
+// Use ParseAuthService for Back4App authentication
+import ParseAuthService from '../services/ParseAuthService';
 
 const AuthContext = createContext(null);
 
@@ -16,8 +16,7 @@ export const useAuth = () => {
  * AuthProvider Component
  * 
  * Provides authentication state and methods to all child components.
- * Uses MockAuthService (localStorage) to handle all authentication operations.
- * No backend required - all data stored locally in the browser.
+ * Uses ParseAuthService (Back4App) to handle all authentication operations.
  */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -32,7 +31,7 @@ export const AuthProvider = ({ children }) => {
    * Check if there is a current authenticated user
    */
   const checkCurrentUser = async () => {
-    const currentUser = await MockAuthService.checkCurrentUser();
+    const currentUser = await ParseAuthService.checkCurrentUser();
     setUser(currentUser);
     setLoading(false);
   };
@@ -41,10 +40,10 @@ export const AuthProvider = ({ children }) => {
    * Log in a user
    * @param {string} username - The user's username
    * @param {string} password - The user's password
-   * @returns {Promise<{success: boolean, user?: Object, error?: string}>}
+   * @returns {Promise<{success: boolean, user?: Parse.User, error?: string}>}
    */
   const login = async (username, password) => {
-    const result = await MockAuthService.login(username, password);
+    const result = await ParseAuthService.login(username, password);
     if (result.success) {
       setUser(result.user);
     }
@@ -57,10 +56,10 @@ export const AuthProvider = ({ children }) => {
    * @param {string} email - The user's email address
    * @param {string} password - The user's password
    * @param {Object} additionalData - Optional additional user data
-   * @returns {Promise<{success: boolean, user?: Object, error?: string}>}
+   * @returns {Promise<{success: boolean, user?: Parse.User, error?: string}>}
    */
   const register = async (username, email, password, additionalData = {}) => {
-    const result = await MockAuthService.register(username, email, password, additionalData);
+    const result = await ParseAuthService.register(username, email, password, additionalData);
     if (result.success) {
       setUser(result.user);
     }
@@ -72,7 +71,7 @@ export const AuthProvider = ({ children }) => {
    * @returns {Promise<{success: boolean, error?: string}>}
    */
   const logout = async () => {
-    const result = await MockAuthService.logout();
+    const result = await ParseAuthService.logout();
     if (result.success) {
       setUser(null);
     }

@@ -730,7 +730,7 @@ function Navigation() {
             <>
               <li style={{ marginLeft: 'auto' }}>
                 <span style={{ color: '#666', padding: '0 1rem' }}>
-                  {user?.username || 'User'}
+                  {user?.get('username') || user?.username || 'User'}
                 </span>
               </li>
               <li>

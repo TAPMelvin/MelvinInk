@@ -24,9 +24,10 @@ class ParseAuthService {
       const loggedInUser = await Parse.User.logIn(username, password);
       return { success: true, user: loggedInUser };
     } catch (error) {
+      console.error('Parse login error:', error);
       return { 
         success: false, 
-        error: error.message || 'Login failed. Please check your credentials.' 
+        error: error.message || error.error || 'Login failed. Please check your credentials.' 
       };
     }
   }
@@ -52,11 +53,15 @@ class ParseAuthService {
       });
 
       const createdUser = await user.signUp();
+      console.log('User registered successfully:', createdUser.id, createdUser.get('username'));
       return { success: true, user: createdUser };
     } catch (error) {
+      console.error('Parse register error:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
       return { 
         success: false, 
-        error: error.message || 'Registration failed. Please try again.' 
+        error: error.message || error.error || 'Registration failed. Please try again.' 
       };
     }
   }
