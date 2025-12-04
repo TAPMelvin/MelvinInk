@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.4.0] - 2025-11-03
+## [0.4.0] - 2025-12-04
 
 ### Added
 - My Bookings page for users to view their booking history
