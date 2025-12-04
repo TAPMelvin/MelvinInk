@@ -84,6 +84,64 @@ class Booking extends Parse.Object {
     }
   }
 
+  // Get bookings by Parse User (by email)
+  static async getUserBookings(user) {
+    try {
+      const query = new Parse.Query(Booking);
+      // Try multiple ways to get user email
+      const userEmail = user.get ? user.get('email') : (user.email || null);
+      const username = user.get ? user.get('username') : (user.username || null);
+      
+      console.log('getUserBookings - User email:', userEmail);
+      console.log('getUserBookings - Username:', username);
+      
+      if (!userEmail && !username) {
+        console.warn('getUserBookings - No email or username found for user');
+        return [];
+      }
+      
+      // Try exact email match first
+      if (userEmail) {
+        query.equalTo('clientEmail', userEmail);
+      }
+      
+      // If no email or no results with email, try username
+      if (!userEmail && username) {
+        query.equalTo('clientEmail', username);
+      }
+      
+      query.include(['design', 'client']);
+      query.descending('createdAt');
+      const bookings = await query.find();
+      
+      console.log('getUserBookings - Found bookings:', bookings.length);
+      if (bookings.length > 0) {
+        console.log('getUserBookings - First booking email:', bookings[0].get('clientEmail'));
+        console.log('getUserBookings - First booking status:', bookings[0].get('status'));
+      } else {
+        // If no bookings found with exact match, try case-insensitive search
+        console.log('getUserBookings - No bookings found with exact match, trying case-insensitive...');
+        const allBookings = await new Parse.Query(Booking)
+          .include(['design', 'client'])
+          .descending('createdAt')
+          .find();
+        
+        const matchedBookings = allBookings.filter(b => {
+          const bookingEmail = b.get('clientEmail') || '';
+          return bookingEmail.toLowerCase() === (userEmail || username || '').toLowerCase();
+        });
+        
+        console.log('getUserBookings - Found bookings (case-insensitive):', matchedBookings.length);
+        return matchedBookings;
+      }
+      
+      return bookings;
+    } catch (error) {
+      console.error('Error fetching user bookings:', error);
+      throw error;
+    }
+  }
+
   static async getUpcomingBookings() {
     try {
       const now = new Date();
@@ -134,9 +192,11 @@ class Booking extends Parse.Object {
   // Create a new booking
   static async createBooking(bookingData) {
     try {
+      console.log('createBooking - bookingData.email:', bookingData.email);
       const booking = new Booking();
       booking.set('clientName', bookingData.name);
       booking.set('clientEmail', bookingData.email);
+      console.log('createBooking - Setting clientEmail to:', bookingData.email);
       booking.set('clientPhone', bookingData.phone);
       booking.set('tattooType', bookingData.tattooType);
       booking.set('bodyPart', bookingData.bodyPart);
@@ -165,6 +225,7 @@ class Booking extends Parse.Object {
       }
       
       const savedBooking = await booking.save();
+      console.log('createBooking - Saved booking with clientEmail:', savedBooking.get('clientEmail'));
       return savedBooking;
     } catch (error) {
       console.error('Error creating booking:', error);
@@ -219,11 +280,28 @@ class Booking extends Parse.Object {
   async cancelBooking(reason = '') {
     try {
       this.set('status', 'cancelled');
-      this.set('notes', reason);
+      if (reason) {
+        const existingNotes = this.get('notes') || '';
+        this.set('notes', existingNotes ? `${existingNotes}\nCancellation: ${reason}` : `Cancellation: ${reason}`);
+      }
       const updatedBooking = await this.save();
       return updatedBooking;
     } catch (error) {
       console.error('Error cancelling booking:', error);
+      throw error;
+    }
+  }
+
+  // Request modification (adds a modification request note)
+  async requestModification(requestText) {
+    try {
+      const existingNotes = this.get('notes') || '';
+      this.set('notes', existingNotes ? `${existingNotes}\nModification Request: ${requestText}` : `Modification Request: ${requestText}`);
+      this.set('status', 'pending'); // Reset to pending for review
+      const updatedBooking = await this.save();
+      return updatedBooking;
+    } catch (error) {
+      console.error('Error requesting modification:', error);
       throw error;
     }
   }

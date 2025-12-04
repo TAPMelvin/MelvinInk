@@ -1,5 +1,34 @@
 # Change Log
 
+## [0.4.0] - 2025-11-03
+
+### Added
+- My Bookings page for users to view their booking history
+- My Designs page for users to view their submitted designs and booking reference images
+- Admin Dashboard for managing all bookings with status updates and filters
+- Admin Designs Dashboard for viewing and managing all submitted designs
+- Booking cancellation and modification request functionality
+- Reference image display in admin dashboard
+- Design deletion functionality for admins
+- Booking count display for each design
+- User booking history with upcoming and past bookings sections
+- Admin booking status management with notes
+- Design filtering by availability in admin dashboard
+- Navigation links for My Bookings, My Designs, and Admin Dashboard
+
+### Changed
+- Booking form now auto-fills with logged-in user's email and name
+- Booking creation uses logged-in user's email automatically
+- My Designs page shows both submitted designs and booking reference images
+- Navigation shows different links for admin vs regular users
+- Admin navigation simplified to show only Admin Dashboard
+
+### Fixed
+- Bookings now properly linked to logged-in users by email
+- Email matching improved with case-insensitive fallback
+- Reference images now display correctly in admin dashboard
+- User bookings properly filtered by authenticated user's email
+
 ## [0.3.0] - 2025-11-03
 
 ### Added

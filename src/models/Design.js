@@ -106,7 +106,7 @@ class Design extends Parse.Object {
     return this.get('available') === true;
   }
 
-  // Create a new design (admin function)
+  // Create a new design
   static async createDesign(designData) {
     try {
       const design = new Design();
@@ -115,6 +115,16 @@ class Design extends Parse.Object {
       design.set('category', designData.category);
       design.set('available', designData.available !== false);
       design.set('sizes', designData.sizes || []);
+      
+      // Set submittedByEmail if user is provided
+      if (designData.user) {
+        const userEmail = designData.user.get('email');
+        if (userEmail) {
+          design.set('submittedByEmail', userEmail);
+        }
+      } else if (designData.submittedByEmail) {
+        design.set('submittedByEmail', designData.submittedByEmail);
+      }
       
       if (designData.image) {
         const parseFile = new Parse.File('design.jpg', designData.image);
@@ -138,6 +148,55 @@ class Design extends Parse.Object {
       return updatedDesign;
     } catch (error) {
       console.error('Error updating design availability:', error);
+      throw error;
+    }
+  }
+
+  // Get designs submitted by a user (by email or user ID)
+  static async getUserDesigns(user) {
+    try {
+      const query = new Parse.Query(Design);
+      // Match by email from Parse User
+      const userEmail = user.get('email');
+      if (userEmail) {
+        // Try submittedByEmail first
+        query.equalTo('submittedByEmail', userEmail);
+      } else {
+        // If no email, return empty array
+        return [];
+      }
+      query.descending('createdAt');
+      const designs = await query.find();
+      return designs;
+    } catch (error) {
+      console.error('Error fetching user designs:', error);
+      throw error;
+    }
+  }
+
+  // Get booking count for a design
+  static async getBookingCount(designId) {
+    try {
+      const query = new Parse.Query('Booking');
+      // Get the design object first
+      const designQuery = new Parse.Query('Design');
+      const design = await designQuery.get(designId);
+      query.equalTo('design', design);
+      const count = await query.count();
+      return count;
+    } catch (error) {
+      console.error('Error fetching booking count:', error);
+      return 0;
+    }
+  }
+
+  // Delete design
+  async deleteDesign() {
+    try {
+      await this.destroy();
+      return true;
+    } catch (error) {
+      console.error('Error deleting design:', error);
       throw error;
     }
   }

@@ -14,6 +14,10 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthRouteGuard from './components/AuthRouteGuard';
+import MyBookings from './components/MyBookings';
+import AdminDashboard from './components/AdminDashboard';
+import MyDesigns from './components/MyDesigns';
+import AdminDesignsDashboard from './components/AdminDesignsDashboard';
 
 function Home() {
   return (
@@ -410,6 +414,7 @@ function Schedule() {
 }
 
 function BookingPage() {
+  const { user } = useAuth();
   const [bookingInfo, setBookingInfo] = useState(null);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -425,19 +430,36 @@ function BookingPage() {
   });
   const [submitMessage, setSubmitMessage] = useState('');
 
+  // Prefill form with logged-in user's info
+  useEffect(() => {
+    if (user) {
+      const userEmail = user.get('email') || user.email;
+      const username = user.get('username') || user.username;
+      setFormData(prev => ({
+        ...prev,
+        email: userEmail || prev.email,
+        name: username || prev.name
+      }));
+    }
+  }, [user]);
+
   // Use Parse form hook for form submission
   const { submit, loading: submitting, reset } = useParseForm(
     async (data) => {
+      // Use logged-in user's email if available, otherwise use form email
+      const bookingEmail = user ? (user.get('email') || user.email || data.email) : data.email;
+      
       // Create or update client first
       const client = await Client.createOrUpdateClient({
         name: data.name,
-        email: data.email,
+        email: bookingEmail,
         phone: data.phone
       });
       
-      // Create booking
+      // Create booking with the correct email
       const booking = await Booking.createBooking({
         ...data,
+        email: bookingEmail, // Use logged-in user's email
         clientId: client.id
       });
       
@@ -716,6 +738,13 @@ function Navigation() {
     setLoggingOut(false);
   };
 
+  // Check if user is admin
+  const isAdmin = user && (
+    user.get('isAdmin') === true ||
+    user.get('email') === 'admin@melvink.com' ||
+    user.get('username') === 'admin'
+  );
+
   return (
     <header>
       <nav className="site-nav">
@@ -728,6 +757,9 @@ function Navigation() {
           <li><Link to="/faq">Q & A</Link></li>
           {isAuthenticated ? (
             <>
+              {!isAdmin && <li><Link to="/my-bookings">My Bookings</Link></li>}
+              {!isAdmin && <li><Link to="/my-designs">My Designs</Link></li>}
+              {isAdmin && <li><Link to="/admin/dashboard">Admin Dashboard</Link></li>}
               <li style={{ marginLeft: 'auto' }}>
                 <span style={{ color: '#666', padding: '0 1rem' }}>
                   {user?.get('username') || user?.username || 'User'}
@@ -775,6 +807,42 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <BookingPage />
+          </ProtectedRoute>
+        } 
+      />
+      {/* My Bookings - protected route */}
+      <Route 
+        path="/my-bookings" 
+        element={
+          <ProtectedRoute>
+            <MyBookings />
+          </ProtectedRoute>
+        } 
+      />
+      {/* My Designs - protected route */}
+      <Route 
+        path="/my-designs" 
+        element={
+          <ProtectedRoute>
+            <MyDesigns />
+          </ProtectedRoute>
+        } 
+      />
+      {/* Admin Dashboard - protected route */}
+      <Route 
+        path="/admin/dashboard" 
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      {/* Admin Designs Dashboard - protected route */}
+      <Route 
+        path="/admin/designs" 
+        element={
+          <ProtectedRoute>
+            <AdminDesignsDashboard />
           </ProtectedRoute>
         } 
       />
